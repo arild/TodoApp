@@ -5,7 +5,8 @@ config["My tests"] = {
     environment: "browser", // or "node"
     sources: [
         "lib/*.js",
-        "src/*.js"
+        "src/client/*.js",
+        "src/server/*.js"
     ],
     tests: [
         "test/*-test.js",

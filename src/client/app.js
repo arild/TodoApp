@@ -11,7 +11,7 @@ var TodoApp = function() {
 
 		var callback = function(data) {
 			RemoveLogin();
-			PresentTodoList(data);
+			PresentTodoList(user);
 		};
 
 		$("form").submit(callback);		

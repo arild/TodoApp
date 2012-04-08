@@ -11,6 +11,7 @@ var TodoApp = function() {
 				return 2 + 4;
 			}
 		};
+			
 		var template = "{{title}} spends {{calc}}";
 		var html = Mustache.to_html(template, view);
 		return html;

@@ -1,0 +1,19 @@
+html {
+    background: #eee;
+}
+
+body {
+    width: 500px;
+    background: #fff;
+    padding: 1em;
+    margin: 1em auto;
+}
+
+table {
+    width: 100%;
+}
+
+table th {
+    border-bottom: 2px solid #999;
+    text-align: left;
+}

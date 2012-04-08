@@ -1,25 +1,28 @@
-buster.testCase("TodoApp", {
+buster.testCase("TodoApp Run", {
 	setUp : function() {
 		this.clock = this.useFakeTimers();
 		this.server = sinon.fakeServer.create();
-		TodoApp.Run();
 	},
 
 	tearDown : function() {
 		this.server.restore();
 	},
 
-	'Run' : function() {
+	'Run - should add some content when application is executed' : function() {
+		assert.equals($('#app').html(), '');
+		TodoApp.Run();
 		refute.equals($('#app').html(), '');
 	},
 
-	'PresentLogin' : function() {
+	'AddRemoveLogin' : function() {
+		TodoApp.AddLogin();
 		assert.defined($('form'));
 		TodoApp.RemoveLogin();
 		assert.isNull($('form').html());		
 	},
 	
-	'PresentLoginSubmit' : function() {
+	'HandleLogin - should remove login dom' : function() {
+		TodoApp.Run();
 		$('#loginButton').click();
 		assert.isNull($('form').html());
 	},
@@ -33,11 +36,13 @@ buster.testCase("TodoApp", {
 		this.server.respond();
 		
 		assert.equals($('li:eq(0)').html(), 'do stuff');
+		assert.equals($('li:eq(0)').attr('id'), '1');
 		assert.equals($('li:eq(1)').html(), 'do stuff again');		
+		assert.equals($('li:eq(1)').attr('id'), '3');
+		assert.equals($('#itemsHeader').html(), 'arild');
 	}
 	
 });
-
 
 buster.testCase("Views", {
 	setUp : function() {

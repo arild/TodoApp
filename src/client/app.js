@@ -1,50 +1,53 @@
 
 var TodoApp = function() {
+	$('body').html('<div id="app"></div>');
+
 	var Run = function() {
-		$('body').html('<div id="app"></div>');
-		PresentLogin();
+		HandleLogin();
 	},
 	
-	PresentLogin = function() {
+	HandleLogin = function() {
+		AddLogin();
+		// Binds success callback to login form
+		$("form").submit(function() {
+			var userName = $('#userName').val();
+			RemoveLogin();
+			PresentTodoList(userName);
+		});		
+	},
+	
+	AddLogin = function() {
 		var html = Views.LoginBox();
 		$('#app').html(html);
-
-		var callback = function(data) {
-			RemoveLogin();
-			PresentTodoList(user);
-		};
-
-		$("form").submit(callback);		
 	},
 	
 	RemoveLogin = function() {
 		$('form').remove();
 	},
 
-	PresentTodoList = function(user) {
-		var callback = function(data) {
+	PresentTodoList = function(userName) {
+		Models.GetData(userName, function(data) {
 			var html = Views.ItemList(data);
 			$('#app').html(html);
-		};
-		Models.GetData(user, callback);
+		});
 	};
 
 	return {
 		Run : Run,
 		PresentTodoList : PresentTodoList,
+		AddLogin: AddLogin,
 		RemoveLogin : RemoveLogin
 	};
 }();
 
 
 var Models = function() {
-	
-	GetData = function(user, callback) {
+	var GetData = function(user, callback) {
 		$.ajax({
 			url : '/user/' + user,
 			success : callback,
-			error : function(objRequest) {
-				buster.log('FAIL: ' + objRequest);
+			error : function() {
+				alert('getting user data failed');
 			}
 		});
 	};
@@ -56,8 +59,8 @@ var Models = function() {
 
 
 var Views = function() {
-	var itemList = 'Items:<ul>{{#items}} <li>{{text}}</li> {{/items}}</ul>',
-	loginBox = '<form><input type="text"><input id="loginButton" type="submit" value="Submit" /></form>',
+	var itemList = '<h2 id="itemsHeader">{{user}}</h2><ul id="items">{{#items}} <li id="{{id}}">{{text}}</li> {{/items}}</ul>',
+	loginBox = '<form><input id="userName" type="text"><input id="loginButton" type="submit" value="Submit" /></form>',
 	
 	
 	ItemList = function(data) {
@@ -69,6 +72,7 @@ var Views = function() {
 	},
 
 	render = function(view, data) {
+		buster.log(data);
 		var html = Mustache.to_html(view, data);
 		return html;
 	};

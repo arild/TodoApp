@@ -1,68 +1,80 @@
+
 var TodoApp = function() {
-	var eqCtl,
-
-	Run = function() {
+	var Run = function() {
 		$('body').html('<div id="app"></div>');
-		$('#app').html(PresentTodoList());
-		//get data
-		//push data to app div
+		PresentLogin();
 	},
+	
+	PresentLogin = function() {
+		var html = Views.LoginBox();
+		$('#app').html(html);
 
-	MustacheTest = function() {
-		var view = {
-			title : "Joe",
-			calc : function() {
-				return 2 + 4;
-			}
+		var callback = function(data) {
+			RemoveLogin();
+			PresentTodoList(data);
 		};
-			
-		var template = "{{title}} spends {{calc}}";
-		var html = Mustache.to_html(template, view);
-		return html;
+
+		$("form").submit(callback);		
+	},
+	
+	RemoveLogin = function() {
+		$('form').remove();
 	},
 
-	PresentTodoList = function() {
-		var data = Models.GetData('Arild');
-
-		return Views.ItemList(data);
+	PresentTodoList = function(user) {
+		var callback = function(data) {
+			var html = Views.ItemList(data);
+			$('#app').html(html);
+		};
+		Models.GetData(user, callback);
 	};
 
 	return {
-		Run: Run,
-		MustacheTest: MustacheTest,
-		PresentTodoList: PresentTodoList
+		Run : Run,
+		PresentTodoList : PresentTodoList,
+		RemoveLogin : RemoveLogin
 	};
 }();
+
 
 var Models = function() {
-	var userData,				
-
-	GetData = function (user) {
-		if (userData == null) return null;
-		return userData;
+	
+	GetData = function(user, callback) {
+		$.ajax({
+			url : '/user/' + user,
+			success : callback,
+			error : function(objRequest) {
+				buster.log('FAIL: ' + objRequest);
+			}
+		});
 	};
 
 	return {
-		GetData: GetData
+		GetData : GetData
 	};
 }();
 
-var Views = function () {
-	var itemList = "Items:<ul>{{#items}} <li>{{text}}</li> {{/items}}</ul>",
 
-
-
-	ItemList = function (data) {
+var Views = function() {
+	var itemList = 'Items:<ul>{{#items}} <li>{{text}}</li> {{/items}}</ul>',
+	loginBox = '<form><input type="text"><input id="loginButton" type="submit" value="Submit" /></form>',
+	
+	
+	ItemList = function(data) {
 		return render(itemList, data);
 	},
+	
+	LoginBox = function() {
+		return loginBox;
+	},
 
-	render = function (view, data) {
+	render = function(view, data) {
 		var html = Mustache.to_html(view, data);
-		return html;		
+		return html;
 	};
 
 	return {
-		ItemList: ItemList
+		ItemList : ItemList,
+		LoginBox : LoginBox
 	};
-
 }();

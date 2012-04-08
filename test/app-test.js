@@ -1,32 +1,49 @@
 
-buster.testCase("CSI", {
+buster.testCase("TodoApp", {
     setUp: function () {
         this.clock = this.useFakeTimers();
         
-        this.data = {
-            persons: [{firstName: 'firsth0', lastName: 'last0', info: 'info0'},
-                      {firstName: 'first1', lastName: 'last1', info: 'info1'}],
-                      
-              getFullName: function (idx) {
-            	  return this.persons[idx].firstName + ' ' + this.persons[idx].lastName;
-              },
-              getInfo: function(idx) {
-				return this.persons[idx].info;
-			}
-        }
-        
-        document.body.innerHTML = '<table id="people"><tbody></tbody></table><div id="more_info"></div>';
-        TodoApp.run();
+        TodoApp.Run();
     },
     
     'MustacheTest': function() {
-		assert.equals(TodoApp.MustacheTest(), 'Joe spends 6');
-	},
+		  assert.equals(TodoApp.MustacheTest(), 'Joe spends 6');
+    },
+
+    'Run' : function() {
+      buster.log(document.body.innerHTML);
+      refute.equals($('#app').html(), '');
+    },    
 	
-    'getTodoList': function() {
-    	buster.log(TodoApp.getTodoList());
-    	assert.equals(5, 5);
+    'PresentTodoList': function() {
+    	 var arild = {
+              'user' : 'Arild',
+              'items' : [ 
+                  { 'id' : '1', 'text' : 'do stuff'  },
+                  { 'id' : '3', 'text' : 'do stuff again'  }
+                ]},
+
+            gaute = {
+                'user' : 'Gaute',
+                'items' : [ 
+                    { 'id' : '2', 'text' : 'do stuff OMG'  },
+                    { 'id' : '4', 'text' : 'do stuff again OMG'  }
+                  ]};
+      Models.userData = arild;
+      buster.log(TodoApp.PresentTodoList());
+
     }
 });
 
+buster.testCase("Views", {
+    setUp: function () {
+    },
 
+    'ItemList': function () {
+        var data = { items : [ {text : "item 1"}, {text : "item 2"} ] };
+        var html = Views.ItemList(data);
+        buster.log(html);
+        assert.equals($('li:eq(0)', html).html(), 'item 1' );
+        assert.equals($('li:eq(1)', html).html(), 'item 2' );
+    }
+});

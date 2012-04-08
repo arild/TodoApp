@@ -1,7 +1,11 @@
 var TodoApp = function() {
 	var eqCtl,
 
-	run = function() {
+	Run = function() {
+		$('body').html('<div id="app"></div>');
+		$('#app').html(PresentTodoList());
+		//get data
+		//push data to app div
 	},
 
 	MustacheTest = function() {
@@ -16,21 +20,48 @@ var TodoApp = function() {
 		return html;
 	},
 
-	getTodoList = function() {
-		var data = {
-			items : [ {text : "item 1"}, {text : "item 2"} ]
-		};
-		
-		var template = "Items:<ul>{{#items}}"
-				+ "<li>{{text}}</li>" + "{{/items}}</ul>";
-		var html = Mustache.to_html(template, data);
-		return html;
+	PresentTodoList = function() {
+		var data = Models.GetData('Arild');
+
+		return Views.ItemList(data);
 	};
 
 	return {
-		run : run,
-		add : add,
+		Run: Run,
 		MustacheTest: MustacheTest,
-		getTodoList : getTodoList
+		PresentTodoList: PresentTodoList
 	};
+}();
+
+var Models = function() {
+	var userData,				
+
+	GetData = function (user) {
+		if (userData == null) return null;
+		return userData;
+	};
+
+	return {
+		GetData: GetData
+	};
+}();
+
+var Views = function () {
+	var itemList = "Items:<ul>{{#items}} <li>{{text}}</li> {{/items}}</ul>",
+
+
+
+	ItemList = function (data) {
+		return render(itemList, data);
+	},
+
+	render = function (view, data) {
+		var html = Mustache.to_html(view, data);
+		return html;		
+	};
+
+	return {
+		ItemList: ItemList
+	};
+
 }();

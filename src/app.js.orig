@@ -1,0 +1,24 @@
+(function () {
+    window.PEOPLE = [
+        {firstName: "Rich", lastName: "Hickey", info: "Funky but not Groovy."},
+        {firstName: "Donald", lastName: "Knuth", info: "Algorithmically unchallenged."},
+        {firstName: "Gerald Jay", lastName: "Sussman", info: "Artificially intelligent."},
+        {firstName: "Edsger", lastName: "W. Dijkstra", info: "Evidently clever."}
+    ];
+    function fakeAjax(data, cb) {
+        setTimeout(function () { cb(data); }, Math.random() * 500);
+    };
+
+    // No changes allowed above this line
+    // -----------------------------------------------------------------
+
+    window.csi = window.csi || {};
+    csi.index = {
+        run: function (people) {
+        },
+        
+        renderPeopleTable: function() {
+			
+		}};
+}());
+

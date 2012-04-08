@@ -16,12 +16,17 @@ buster.testCase("CSI", {
         }
         
         document.body.innerHTML = '<table id="people"><tbody></tbody></table><div id="more_info"></div>';
-        TodoApp.init();
+        TodoApp.run();
     },
     
-    "add": function () {
-    	assert.equals(TodoApp.add(5, 5), 10);
-    }    
+    'MustacheTest': function() {
+		assert.equals(TodoApp.MustacheTest(), 'Joe spends 6');
+	},
+	
+    'getTodoList': function() {
+    	buster.log(TodoApp.getTodoList());
+    	assert.equals(5, 5);
+    }
 });
 
 

@@ -23,17 +23,33 @@ server.get("/", function (request, response) {
     response.end();
 });
 
+server.get("/#", function (request, response) {
+  return;
+});
+
 server.get("/app.js", function (request, response) {
     response.writeHeader(200, {"Content-Type": "text/javascript"});
     response.write(app);
     response.end();
 });
 
-
+/*
 server.get(new RegExp("^/user/(.*)$"), function hello(req, res, match) {
   if (match == 'arild') return '{ "user" : "arild", "items" : [ {"id" : "1", "text" : "do stuff"}, {"id" : "3", "text" : "do stuff again"} ]}';
   if (match == 'gaute') return '{ "user" : "gaute", "items" : [ {"id" : "2", "text" : "do stuff 2"}, {"id" : "4", "text" : "do stuff again 2"} ]}';
   return "Hello " + (match || "World") + "!";
+});
+*/
+
+
+
+server.get(new RegExp("^/user/(.*)$"), function hello(request, response, match) {
+  var json = '{ "user" : "0" }';
+  if (match == 'arild') json = '{ "user" : "arild", "items" : [ {"id" : "1", "text" : "do stuff"}, {"id" : "3", "text" : "do stuff again"} ]}';
+  if (match == 'gaute') json = '{ "user" : "gaute", "items" : [ {"id" : "2", "text" : "do stuff 2"}, {"id" : "4", "text" : "do stuff again 2"} ]}';
+  response.writeHead(200, { 'Content-Type': 'application/json' });
+  response.write(json);
+  response.end();
 });
 
 
